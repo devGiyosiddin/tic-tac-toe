@@ -60,7 +60,6 @@ const TicTacToe = () => {
     }
   };
 
-  // Проверка результата игры
   const checkGameResult = (currentBoard) => {
     for (let combo of winningCombos) {
       if (combo.every(i => currentBoard[i] === 'X')) return 'X';
@@ -69,7 +68,6 @@ const TicTacToe = () => {
     return currentBoard.every(cell => cell) ? 'tie' : null;
   };
 
-  // ИИ делает ход
   const computerMove = () => {
     const emptyCells = getEmptyCells(board);
     if (!emptyCells.length) return;
@@ -77,7 +75,6 @@ const TicTacToe = () => {
     let move;
     
     if (difficulty === 'easy') {
-      // Случайный ход
       move = emptyCells[Math.floor(Math.random() * emptyCells.length)];
     } 
     else if (difficulty === 'medium') {
@@ -192,7 +189,15 @@ const TicTacToe = () => {
   // Изменение сложности
   const handleDifficultyChange = (level) => {
     setDifficulty(level);
-    if (!gameOver) reset();
+    if (playerSymbol === 'O' && !gameOver) {
+      setCurrentPlayer('X');
+      reset();
+      setTimeout(() => {
+        computerMove();
+      }, 100);
+    } else {
+      if (!gameOver) reset();
+    }
   };
 
   // Изменение символа игрока
@@ -202,11 +207,14 @@ const TicTacToe = () => {
     if (symbol === 'O') {
       setCurrentPlayer('X');
       setMessage('Computer\'s turn');
+      setTimeout(() => {
+        computerMove();
+      }, 100);
     }
   };
 
   return (
-    <div className="container d-flex justify-content-center align-items-center min-vh-100 scale-09">
+    <div className="container d-flex justify-content-center align-items-center min-vh-100">
       <style>
         {`
           .cell {
@@ -259,13 +267,20 @@ const TicTacToe = () => {
           }
 
           .card {
-            max-width: 400px;
-            animation: slideIn 0.5s ease;
+            min-width: 600px;
             border: none;
-            background-color: #354262;
             border-radius: 12px;
+            background-color: #354262;
+            animation: slideIn 0.5s ease;
           }
 
+          .min-width-300 {
+            min-width: 300px;
+          }
+
+          .min-width-220 {
+            min-width: 220px;
+          }
           @keyframes slideIn {
             0% {
               transform: translateY(20px);
@@ -320,12 +335,12 @@ const TicTacToe = () => {
       </style>
 
       <div className="card shadow p-4 text-white">
-        <div className="text-center">
-          <h1 className="display-5 mb-4 gradient-text text-bold">TIC TAC TOE</h1>
-          
+            <h1 className="display-5 mb-4 gradient-text text-bold text-center">TIC TAC TOE</h1>
+        <div className="d-flex gap-3">
+          <div className="text-center min-width-220">
           {/* Game Mode Selection */}
           <div className="mb-4">
-            <div className="btn-group">
+            <div className="btn-group d-flex flex-column">
               <button 
                 className={`btn btn-custom ${gameMode === 'pvp' ? 'active' : ''}`}
                 onClick={() => handleGameModeChange('pvp')}
@@ -346,7 +361,7 @@ const TicTacToe = () => {
             <div className="mb-4">
               <div className="mb-3">
                 <label className="mb-2">Difficulty:</label>
-                <div className="btn-group">
+                <div className="btn-group d-flex gap-2">
                   <button 
                     className={`btn btn-custom ${difficulty === 'easy' ? 'active' : ''}`}
                     onClick={() => handleDifficultyChange('easy')}
@@ -370,7 +385,7 @@ const TicTacToe = () => {
               
               <div>
                 <label className="mb-2">Player Symbol:</label>
-                <div className="btn-group">
+                <div className="btn-group d-flex gap-2">
                   <button 
                     className={`btn btn-custom ${playerSymbol === 'X' ? 'active' : ''}`}
                     onClick={() => handleSymbolChange('X')}
@@ -379,7 +394,7 @@ const TicTacToe = () => {
                   </button>
                   <button 
                     className={`btn btn-custom ${playerSymbol === 'O' ? 'active' : ''}`}
-                    onClick={() => handleSymbolChange('O')}
+                      onClick={() => handleSymbolChange('O')}
                   >
                     O
                   </button>
@@ -387,8 +402,10 @@ const TicTacToe = () => {
               </div>
             </div>
           )}
-          
-          <div className="row g-2 mb-4">
+
+          </div>
+          <div className="d-flex flex-column w-100">
+            <div className="row g-2 mb-4 min-width-300">
             {board.map((cell, index) => (
               <div className="col-4" key={index}>
                 <div
@@ -403,7 +420,7 @@ const TicTacToe = () => {
                 </div>
               </div>
             ))}
-          </div>
+            </div>
 
           <button 
             onClick={reset}
@@ -413,6 +430,7 @@ const TicTacToe = () => {
           </button>
 
           <p className="h5 fw-bold message-text">{message}</p>
+          </div>
         </div>
       </div>
     </div>
