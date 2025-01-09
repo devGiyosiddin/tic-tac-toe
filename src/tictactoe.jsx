@@ -330,13 +330,13 @@ const TicTacToe = () => {
                 className={`btn btn-custom ${gameMode === 'pvp' ? 'active' : ''}`}
                 onClick={() => handleGameModeChange('pvp')}
               >
-                Игрок vs Игрок
+                Player vs Player
               </button>
               <button 
                 className={`btn btn-custom ${gameMode === 'pvc' ? 'active' : ''}`}
                 onClick={() => handleGameModeChange('pvc')}
               >
-                Игрок vs Компьютер
+                Player vs Computer
               </button>
             </div>
           </div>
