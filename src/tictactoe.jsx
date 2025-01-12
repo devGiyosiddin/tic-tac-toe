@@ -238,11 +238,11 @@ const TicTacToe = () => {
       <div className="card shadow p-4 text-white">
         <h1 className="display-5 mb-4 gradient-text text-bold text-center">TIC TAC TOE</h1>
         <div className="d-flex gap-3 mb-3 mx-250 mx-auto">
-          <span><Trophy color='#ddcaca' size={20} /> X: {scores.X}</span>
-          <span><Crown color='#ddcaca' size={20} /> O: {scores.O}</span>
-          <span><UserCircle2 color='#ddcaca' size={20} /> Ties: {scores.tie}</span>
+          <span><Trophy className='icon' size={20} /> X: {scores.X}</span>
+          <span><Crown className='icon' size={20} /> O: {scores.O}</span>
+          <span><UserCircle2 className='icon' size={20} /> Ties: {scores.tie}</span>
         </div>
-        <div className="d-flex gap-3">
+        <div className="d-flex gap-3 custom-column">
           <div className="text-center min-width-220">
             <div className="mb-4">
               <div className="btn-group d-flex flex-column gap-2">
@@ -250,13 +250,13 @@ const TicTacToe = () => {
                   className={`btn btn-def rounded ${gameMode === 'pvp' ? 'active' : ''}`}
                   onClick={() => handleGameModeChange('pvp')}
                 >
-                  <UserCircle2 size={20} /> vs Player
+                  <UserCircle2 className='icon' size={20} /> vs Player
                 </button>
                 <button 
                   className={`btn btn-def rounded ${gameMode === 'pvc' ? 'active' : ''}`}
                   onClick={() => handleGameModeChange('pvc')}
                 >
-                  <Monitor size={20} /> vs Computer
+                  <Monitor className='icon' size={20} /> vs Computer
                 </button>
               </div>
             </div>
@@ -329,7 +329,7 @@ const TicTacToe = () => {
                 onClick={reset}
                 className="btn btn-custom w-60 mb-4"
               >
-                <RotateCcw size={20} /> New Game
+                <RotateCcw className='icon' size={20} /> New Game
               </button>
               <button 
                 onClick={resetScores}
