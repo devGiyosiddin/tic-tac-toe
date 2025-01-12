@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { Trophy, UserCircle2, Monitor, Brain, RotateCcw, Crown } from 'lucide-react';
 
 const TicTacToe = () => {
@@ -10,6 +10,8 @@ const TicTacToe = () => {
   const [gameMode, setGameMode] = useState('pvp');
   const [difficulty, setDifficulty] = useState('easy');
   const [playerSymbol, setPlayerSymbol] = useState('X');
+  const [scores, setScores] = useState({ X: 0, O: 0, tie: 0 });
+  const [winStreak, setWinStreak] = useState(0);
 
   const winningCombos = [
     [0, 1, 2], [3, 4, 5], [6, 7, 8],
@@ -158,9 +160,11 @@ const TicTacToe = () => {
       setMessage(gameMode === 'pvc' ? 
         `${currentPlayer === playerSymbol ? 'You win!' : 'Computer wins!'}` :
         `Player ${currentPlayer} wins!`);
+      setScores(prevScores => ({ ...prevScores, [currentPlayer]: prevScores[currentPlayer] + 1 }));
       setGameOver(true);
     } else if (newBoard.every(cell => cell)) {
       setMessage("It's a tie!");
+      setScores(prevScores => ({ ...prevScores, tie: prevScores.tie + 1 }));
       setGameOver(true);
     } else {
       const nextPlayer = currentPlayer === 'X' ? 'O' : 'X';
@@ -202,6 +206,10 @@ const TicTacToe = () => {
     }
   };
 
+  const resetScores = () => {
+    setScores({ X: 0, O: 0, tie: 0 });
+  };
+
   const handleGameModeChange = (mode) => {
     setGameMode(mode);
     setGameOver(false);
@@ -229,6 +237,11 @@ const TicTacToe = () => {
     <div className="container d-flex justify-content-center align-items-center min-vh-100">
       <div className="card shadow p-4 text-white">
         <h1 className="display-5 mb-4 gradient-text text-bold text-center">TIC TAC TOE</h1>
+        <div className="d-flex gap-3 mb-3 mx-250 mx-auto">
+          <span><Trophy color='#ddcaca' size={20} /> X: {scores.X}</span>
+          <span><Crown color='#ddcaca' size={20} /> O: {scores.O}</span>
+          <span><UserCircle2 color='#ddcaca' size={20} /> Ties: {scores.tie}</span>
+        </div>
         <div className="d-flex gap-3">
           <div className="text-center min-width-220">
             <div className="mb-4">
@@ -311,13 +324,22 @@ const TicTacToe = () => {
                 </div>
               ))}
             </div>
-            <button 
-              onClick={reset}
-              className="btn btn-custom mb-4"
-            >
-              New Game
-            </button>
-            <p className="h5 fw-bold message-text">{message}</p>
+            <div className='d-flex justify-content-center gap-2'>
+              <button 
+                onClick={reset}
+                className="btn btn-custom w-60 mb-4"
+              >
+                <RotateCcw size={20} /> New Game
+              </button>
+              <button 
+                onClick={resetScores}
+                className="btn btn-def mb-4"
+              >
+                Reset Scores
+              </button>
+
+            </div>
+            <p className="h5 fw-bold message-text mx-auto">{message}</p>
           </div>
         </div>
       </div>
